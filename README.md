@@ -20,26 +20,41 @@ RollForge is a lightweight, high-performance library specifically tailored to ha
 
 ## 🚀 Getting Started
 
-RollForge uses a modern CMake and vcpkg toolchain wrapped in Python's build system. To install the library locally for development into your current Python environment, clone the source and run `pip install`.
+To make installation as easy as possible, RollForge is distributed as a pre-compiled Python Wheel (`.whl`). You do **not** need to install CMake, C++ compilers, or vcpkg to use this library in your Python projects!
+
+**Installation:**
+1. Download the latest `rollforge-*.whl` file from the [Releases](https://github.com/sedna08/rollforge/releases) page.
+2. Install it directly into your Python environment using pip:
+
+```bash
+pip install rollforge-0.1.0-cp312-cp312-win_amd64.whl
+```
+
+*(Note: Replace the filename with the exact version you downloaded).*
+
+---
+
+### Building from Source (For Developers)
+
+If you are developing the RollForge engine itself, you will need to compile the C++ source.
 
 **Prerequisites:**
-
 - Python 3.10+
 - CMake 3.20+
+- vcpkg
 - A C++20 compatible compiler (e.g., MinGW GCC)
-- [vcpkg](https://vcpkg.io/en/index.html) installed locally
 
 ```bash
 # Clone the repository
 git clone https://github.com/sedna08/rollforge.git
 cd rollforge
 
-# Install via pip
-# (Note: Passing the Toolchain and Triplet explicitly ensures vcpkg installs dependencies correctly for your compiler)
-pip install . --config-settings="cmake.args=-DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg.cmake;-DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic;-DCMAKE_C_COMPILER=gcc;-DCMAKE_CXX_COMPILER=g++"
-```
+# Install build requirements (Ninja is used instead of MSBuild for MinGW)
+pip install scikit-build-core ninja pybind11
 
-_**NOTE**: Replace the `CMAKE_TOOLCHAIN_FILE` with the absolute path to your local `vcpkg.cmake` installation._
+# Build the wheel locally
+pip wheel . --no-deps --config-settings="cmake.args=-DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg.cmake;-DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic;-DCMAKE_C_COMPILER=gcc;-DCMAKE_CXX_COMPILER=g++;-GMinGW Makefiles"
+```
 
 ---
 

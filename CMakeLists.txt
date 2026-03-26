@@ -5,6 +5,8 @@ project(RollForge VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 
 # Find vcpkg dependencies
 find_package(nlohmann_json CONFIG REQUIRED)
@@ -27,7 +29,7 @@ target_link_libraries(rollforge_core PUBLIC nlohmann_json::nlohmann_json)
 # 2. Python bindings module (optional — requires pybind11)
 option(BUILD_PYTHON_BINDINGS "Build the Python bindings module" OFF)
 
-if(BUILD_PYTHON_BINDINGS)
+if(SKBUILD OR BUILD_PYTHON_BINDINGS)
     find_package(pybind11 CONFIG QUIET)
     if(NOT pybind11_FOUND)
         # Fallback: fetch pybind11 via FetchContent
