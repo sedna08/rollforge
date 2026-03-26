@@ -4,6 +4,7 @@ docs/_internal/**/*
 .agents/**/*
 .venv/**/*
 .venv-*/**/**
+dist/**/*
 
 # Prerequisites
 *.d
