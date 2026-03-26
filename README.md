@@ -1,57 +1,83 @@
-# RollForge
+# 🎲 RollForge
 
-## Highlights
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![C++20](https://img.shields.io/badge/c++-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B20)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Here are the main takeaways of this library:
+A deterministic C++20 D&D mechanics engine with Python bindings.
 
-- Deterministic D&D mechanics engine designed for Python API backends.
-- Built with modern C++23 for high performance and strict type safety.
-- Seamless Python integration using pybind11 and scikit-build-core.
-- Robust dependency management via vcpkg.
-- Fully stateless architecture, perfect for web servers and LLM integration.
+RollForge is a lightweight, high-performance library specifically tailored to handle D&D style mechanics (stat blocks, dice rolls, health parsing, and combat checks). It's designed to act as a stateless engine for Python backends, ensuring the core rules of your game are processed securely and deterministically in C++ before being passed back to Python or submitted as prompts to AI APIs.
 
-## Overview
+---
 
-RollForge is a lightweight, high-performance C++ library specifically tailored to handle D&D style mechanics. It is designed to bridge the gap between deterministic game logic and non-deterministic Large Language Models. By handling dice rolls, stat calculations, and entity management in a strict C++ environment, RollForge ensures that the core rules of the game are always respected before passing narrative control over to an AI.
+## 🎯 Features
 
-### The Problem It Solves
+- **Built with Modern C++20:** Ensures high performance and strict type safety.
+- **Stateless Architecture:** Resolves state changes by taking inputs and emitting the resulting mutations, making it perfectly suited for web servers, LLM integration, and asynchronous game instances.
+- **Robust Toolchain:** Built using CMake, dependency management via `vcpkg` (like json and Boost), and packaged for pip via `scikit-build-core` and `pybind11`.
 
-LLMs struggle with true randomness and strict mathematical state tracking. RollForge solves this by providing a reliable backend calculator. Your Python application passes the current game state to RollForge, it resolves the mechanical actions (like skill checks or combat), and returns both the numerical results and a pre-formatted system prompt ready to be sent to your LLM of choice.
+---
 
-## Usage instructions
+## 🚀 Getting Started
 
-RollForge acts as a stateless engine. You instantiate the state from your database, let the library resolve the mechanics, and use the result to prompt your AI.
+RollForge uses a modern CMake and vcpkg toolchain wrapped in Python's build system. To install the library locally for development into your current Python environment, clone the source and run `pip install`.
+
+**Prerequisites:**
+
+- Python 3.10+
+- CMake 3.20+
+- A C++20 compatible compiler (e.g., MinGW GCC)
+- [vcpkg](https://vcpkg.io/en/index.html) installed locally
+
+```bash
+# Clone the repository
+git clone https://github.com/sedna08/rollforge.git
+cd rollforge
+
+# Install via pip
+# (Note: Passing the Toolchain and Triplet explicitly ensures vcpkg installs dependencies correctly for your compiler)
+pip install . --config-settings="cmake.args=-DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg.cmake;-DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic;-DCMAKE_C_COMPILER=gcc;-DCMAKE_CXX_COMPILER=g++"
+```
+
+_**NOTE**: Replace the `CMAKE_TOOLCHAIN_FILE` with the absolute path to your local `vcpkg.cmake` installation._
+
+---
+
+## 💡 Usage
+
+Once compiled/installed, RollForge behaves seamlessly like a native Python object, powered by the C++ engine:
 
 ```python
 import rollforge
 
-# Load your raw state (e.g., from a database)
-raw_json_state = '{"player": {"stats": {"dexterity": 16}}}'
+# 1. Initialize State
+state = rollforge.SessionState()
+state.current_location = "Goblin Camp"
 
-# Deserialize the state into the C++ engine
-session = rollforge.SessionState.deserialize(raw_json_state)
+# 2. Setup PC Data
+pc = state.player
+pc.name = "Eldrin"
+pc.stats.dexterity = 16  # Automatically translates to a +3 modifier in C++
+pc.armor_class = 15
 
-# Resolve a mechanical action
-result = rollforge.ActionResolver.resolve_check(session, rollforge.StatType.DEXTERITY)
+# 3. Resolve an Attack Check against a target
+goblin = rollforge.Entity()
+goblin.armor_class = 12
+goblin.current_hp = 10
 
-print(f"Roll Total: {result.total}")
-print(f"Prompt for LLM: {result.dm_prompt}")
+# The ActionResolver rolls a D20, adds Eldrin's Dexterity modifier, and checks vs AC.
+hit = rollforge.ActionResolver.resolve_attack(pc, goblin, rollforge.StatType.Dexterity)
+
+# 4. Serialize to JSON for storage/transmission
+print(state.serialize_to_json())
 ```
 
-## Installation instructions
+---
 
-RollForge uses a modern CMake and vcpkg toolchain wrapped in Python's build system.
+## 📚 Documentation
 
-To install the library into your Python environment locally, clone the repository and use pip. The build process will automatically invoke CMake and fetch necessary C++ dependencies (like nlohmann/json and Boost for testing).
+For a comprehensive guide covering all Python classes (`SessionState`, `AbilityScores`, `PlayerCharacter`, `ActionResolver`, and `Dice`) and their attributes, please refer to the **[API Reference Documentation](docs/_internal/api_reference.md)**.
 
-```bash
-git clone <your-repository-url>/rollforge.git
-cd rollforge
-pip install .
-```
+_(Note: In the raw repo, navigate to `docs/api_reference.md` instead of `docs/_internal/api_reference.md` outside of development.)_
 
-**Requirements:**
-
-- C++23 compatible compiler (GCC, Clang, or MSVC)
-- CMake 3.20 or higher
-- Python 3.10 or higher
+---
