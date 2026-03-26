@@ -1,0 +1,15 @@
+[build-system]
+requires = ["scikit-build-core>=0.5.0", "pybind11"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "rollforge"
+version = "0.1.0"
+description = "Deterministic D&D mechanics engine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.scikit-build]
+cmake.args = ["-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake"]
+cmake.targets = ["rollforge"]
