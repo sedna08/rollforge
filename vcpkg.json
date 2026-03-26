@@ -1,0 +1,10 @@
+{
+  "name": "rollforge",
+  "version-string": "0.1.0",
+  "description": "A C++ library for D&D style mechanics resolution, wrapped for Python.",
+  "dependencies": [
+    "nlohmann-json",
+    "boost-test",
+    "pybind11"
+  ]
+}
