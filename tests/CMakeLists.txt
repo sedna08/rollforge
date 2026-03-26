@@ -24,3 +24,8 @@ add_test(NAME EntityTest COMMAND test_entity)
 add_executable(test_session_state test_session_state.cpp)
 target_link_libraries(test_session_state PRIVATE rollforge_core Boost::unit_test_framework)
 add_test(NAME SessionStateTest COMMAND test_session_state)
+
+# Create the test executable for action_engine
+add_executable(test_action_engine test_action_engine.cpp)
+target_link_libraries(test_action_engine PRIVATE rollforge_core Boost::unit_test_framework)
+add_test(NAME ActionEngineTest COMMAND test_action_engine)
