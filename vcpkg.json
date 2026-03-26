@@ -4,7 +4,6 @@
   "description": "A C++ library for D&D style mechanics resolution, wrapped for Python.",
   "dependencies": [
     "nlohmann-json",
-    "boost-test",
-    "pybind11"
+    "boost-test"
   ]
 }

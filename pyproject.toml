@@ -11,5 +11,5 @@ requires-python = ">=3.10"
 dependencies = []
 
 [tool.scikit-build]
-cmake.args = ["-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake"]
+cmake.args = ["-DCMAKE_TOOLCHAIN_FILE=/d/vcpkg/scripts/buildsystems/vcpkg.cmake"]
 cmake.targets = ["rollforge"]

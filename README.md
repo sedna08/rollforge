@@ -5,7 +5,7 @@
 Here are the main takeaways of this library:
 
 - Deterministic D&D mechanics engine designed for Python API backends.
-- Built with modern C++23 for high performance and strict type safety.
+- Built with modern C++20 for high performance and strict type safety.
 - Seamless Python integration using pybind11 and scikit-build-core.
 - Robust dependency management via vcpkg.
 - Fully stateless architecture, perfect for web servers and LLM integration.
@@ -52,6 +52,6 @@ pip install .
 
 **Requirements:**
 
-- C++23 compatible compiler (GCC, Clang, or MSVC)
+- C++20 compatible compiler (GCC, Clang, or MSVC)
 - CMake 3.20 or higher
 - Python 3.10 or higher
